@@ -1,1 +1,10 @@
 rootProject.name = 'assessment-eda-es'
+
+include ':app-service'
+findProject(':app-service').projectDir = file('./applications/app-service')
+
+include ':model'
+findProject(':model').projectDir = file('./domain/model')
+
+include ':usecases'
+findProject(':usecases').projectDir = file('./domain/usecases')
