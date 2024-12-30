@@ -8,3 +8,12 @@ findProject(':model').projectDir = file('./domain/model')
 
 include ':usecases'
 findProject(':usecases').projectDir = file('./domain/usecases')
+
+include ':mongo-repository'
+findProject(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
+
+include ':web'
+findProject(':web').projectDir = file('./infrastructure/entry-points/web')
+
+include ':serializer'
+findProject(':serializer').projectDir = file('./infrastructure/helpers/serializer')
