@@ -1,19 +1,16 @@
 package ec.com.sofka;
 
-import ec.com.sofka.account.Account;
-import ec.com.sofka.account.values.AccountId;
-import ec.com.sofka.account.values.objects.Balance;
-import ec.com.sofka.account.values.objects.Name;
-import ec.com.sofka.account.values.objects.NumberAcc;
+
 import ec.com.sofka.aggregate.Customer;
-import ec.com.sofka.commands.CreateAccountCommand;
+import ec.com.sofka.request.CreateAccountRequest;
 import ec.com.sofka.gateway.AccountRepository;
 import ec.com.sofka.gateway.IEventStore;
-import ec.com.sofka.generics.domain.DomainEvent;
+import ec.com.sofka.gateway.dto.AccountDTO;
+import ec.com.sofka.generics.interfaces.IUseCase;
+import ec.com.sofka.responses.CreateAccountResponse;
 
-import java.util.List;
-
-public class CreateAccountUseCase {
+//Usage of the IUseCase interface
+public class CreateAccountUseCase implements IUseCase<CreateAccountRequest,CreateAccountResponse> {
     private final IEventStore repository;
     private final AccountRepository accountRepository;
 
@@ -22,25 +19,34 @@ public class CreateAccountUseCase {
         this.accountRepository = accountRepository;
     }
 
-    public void execute(CreateAccountCommand cmd) {
-        //Ask coach jacobo for this part*
-        List<DomainEvent> events = repository.findAggregate(cmd.getAggregateId());
-        //Rebuild the aggregate
-        Customer customer = Customer.from(cmd.getAggregateId(), events);
 
-        customer.createAccount(cmd.getBalance(), cmd.getNumber(), cmd.getName());
+    //Of course, you have to create that class Response in usecases module on a package called responses or you can also group the command with their response class in a folder (Screaming architecture)
+    //You maybe want to check Jacobo's repository to see how he did it
+    public CreateAccountResponse execute(CreateAccountRequest cmd) {
+        //Create the aggregate, remember this usecase is to create the account the first time so just have to create it.
+        Customer customer = new Customer();
 
-        Account account = new Account(new AccountId(),
-                Balance.of(cmd.getBalance()),
-                NumberAcc.of(cmd.getNumber()),
-                Name.of(cmd.getName()));
+        //Then we create the account
+        customer.createAccount(cmd.getBalance(), cmd.getNumber(), cmd.getCustomerName());
+
+        //Save the account on the account repository
+        accountRepository.save(
+                new AccountDTO(
+                        customer.getAccount().getBalance().getValue(),
+                        customer.getAccount().getNumber().getValue(),
+                        customer.getAccount().getName().getValue()
+
+                ));
 
         //Last step for events to be saved
         customer.getUncommittedEvents().forEach(repository::save);
 
-        //Save the account on the account repo
-        accountRepository.save(account);
-
         customer.markEventsAsCommitted();
+
+        //Return the response
+        return new CreateAccountResponse(
+                customer.getId().getValue(),
+                customer.getAccount().getNumber().getValue(),
+                customer.getAccount().getName().getValue());
     }
 }

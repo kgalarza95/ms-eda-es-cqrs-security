@@ -3,11 +3,15 @@ package ec.com.sofka.data;
 import java.math.BigDecimal;
 
 public class RequestDTO {
+    public String customerId;
+    //Name
     public String customer;
+    //NumAcc
     public String account;
     public BigDecimal balance;
 
-    public RequestDTO(String customer, String account, BigDecimal balance) {
+    public RequestDTO(String customerId, String customer, String account, BigDecimal balance) {
+        this.customerId = customerId;
         this.customer = customer;
         this.account = account;
         this.balance = balance;
@@ -18,24 +22,18 @@ public class RequestDTO {
         return customer;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
     public String getAccount() {
         return account;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
-    }
 
     public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public String getCustomerId() {
+        return customerId;
     }
+
 
 }

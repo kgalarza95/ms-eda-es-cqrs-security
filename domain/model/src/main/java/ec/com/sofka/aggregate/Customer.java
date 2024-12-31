@@ -17,14 +17,14 @@ public class Customer extends AggregateRoot<CustomerId> {
     //To create the Aggregate the first time, ofc have to set the id as well.
     public Customer() {
         super(new CustomerId());
-        //9. Add the handler to the aggregate
+        //Add the handler to the aggregate
         setSubscription(new CustomerHandler(this));
     }
 
     //To rebuild the aggregate
     private Customer(final String id) {
         super(CustomerId.of(id));
-        //9. Add the handler to the aggregate
+        //Add the handler to the aggregate
         setSubscription(new CustomerHandler(this));
     }
 
@@ -39,12 +39,12 @@ public class Customer extends AggregateRoot<CustomerId> {
 
     //Remember that User as Aggregate is the open door to interact with the entities
     public void createAccount(BigDecimal accountBalance, String accountNumber, String name ) {
-        //10. Add the event to the aggregate
+        //Add the event to the aggregate
         addEvent(new AccountCreated(accountNumber,accountBalance, name)).apply();
 
     }
 
-    //11. To rebuild the aggregate
+    //To rebuild the aggregate
     public static Customer from(final String id, List<DomainEvent> events) {
         Customer customer = new Customer(id);
         events.forEach((event) -> customer.addEvent(event).apply());

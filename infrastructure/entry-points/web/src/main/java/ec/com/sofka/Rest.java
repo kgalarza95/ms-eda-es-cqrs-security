@@ -21,8 +21,7 @@ public class Rest {
     }
 
     @PostMapping("/account")
-    public ResponseEntity<Void> createAccount(@RequestBody RequestDTO requestDTO){
-        handler.createAccount(requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ResponseDTO> createAccount(@RequestBody RequestDTO requestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(handler.createAccount(requestDTO));
     }
 }

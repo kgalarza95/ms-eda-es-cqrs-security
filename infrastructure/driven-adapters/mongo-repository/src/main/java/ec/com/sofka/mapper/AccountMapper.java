@@ -6,21 +6,21 @@ import ec.com.sofka.account.values.objects.Balance;
 import ec.com.sofka.account.values.objects.Name;
 import ec.com.sofka.account.values.objects.NumberAcc;
 import ec.com.sofka.data.AccountEntity;
+import ec.com.sofka.gateway.dto.AccountDTO;
 
 public class AccountMapper {
-    public static AccountEntity toEntity(Account account) {
-        return new AccountEntity(account.getBalance().getValue(),
-                account.getName().getValue(),
-                account.getNumber().getValue()
+    public static AccountEntity toEntity(AccountDTO accountDTO) {
+        return new AccountEntity(accountDTO.getBalance(),
+                accountDTO.getOwner(),
+                accountDTO.getAccountNumber()
                 );
     }
 
-    public static Account toDomain(AccountEntity accountEntity) {
-        return new Account(
-                AccountId.of(accountEntity.getId()),
-                Balance.of(accountEntity.getBalance()),
-                NumberAcc.of(accountEntity.getAccountNumber()),
-                Name.of(accountEntity.getOwner())
+    public static AccountDTO toDTO(AccountEntity accountEntity) {
+        return new AccountDTO(
+                accountEntity.getBalance(),
+                accountEntity.getAccountNumber(),
+                accountEntity.getOwner()
         );
     }
 }

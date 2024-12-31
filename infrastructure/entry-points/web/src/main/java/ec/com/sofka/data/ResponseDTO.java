@@ -1,28 +1,22 @@
 package ec.com.sofka.data;
 
 public class ResponseDTO {
-    public String customer;
-    public String account;
+    public String customerId;
+    public String accountName;
 
-    public ResponseDTO(String customer, String account) {
-        this.customer = customer;
-        this.account = account;
+    public ResponseDTO(String customerId, String accountName) {
+        this.customerId = customerId;
+        this.accountName = accountName;
     }
 
-    public String getCustomer() {
-        return customer;
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
 }

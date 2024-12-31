@@ -17,7 +17,7 @@ public class CustomerHandler extends DomainActionsContainer {
             Account account = new Account(new AccountId(),
                     Balance.of(event.getAccountBalance()),
                     NumberAcc.of(event.getAccountNumber()),
-                    Name.of(event.getAccountNumber()));
+                    Name.of(event.getName()));
             customer.setAccount(account);
         });
     }

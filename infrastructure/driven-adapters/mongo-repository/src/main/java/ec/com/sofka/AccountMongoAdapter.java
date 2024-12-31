@@ -4,6 +4,7 @@ import ec.com.sofka.account.Account;
 import ec.com.sofka.data.AccountEntity;
 import ec.com.sofka.database.account.IMongoRepository;
 import ec.com.sofka.gateway.AccountRepository;
+import ec.com.sofka.gateway.dto.AccountDTO;
 import ec.com.sofka.mapper.AccountMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,16 +22,16 @@ public class AccountMongoAdapter implements AccountRepository {
     }
 
     @Override
-    public Account findByAcccountId(String id) {
+    public AccountDTO findByAcccountId(String id) {
         AccountEntity found = repository.findById(id).get();
 
-        return AccountMapper.toDomain(found);
+        return AccountMapper.toDTO(found);
     }
 
     @Override
-    public Account save(Account account) {
+    public AccountDTO save(AccountDTO account) {
         AccountEntity a = AccountMapper.toEntity(account);
         AccountEntity saved = repository.save(a);
-        return AccountMapper.toDomain(saved);
+        return AccountMapper.toDTO(saved);
     }
 }

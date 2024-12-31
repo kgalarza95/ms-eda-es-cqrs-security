@@ -10,7 +10,6 @@ public class AccountCreated extends DomainEvent {
     private final String name;
 
     public AccountCreated(String accountNumber, BigDecimal accountBalance, String name) {
-        //super("sofka.account.accountcreated");
         super(EventsEnum.ACCOUNT_CREATED.name());
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
