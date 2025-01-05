@@ -4,26 +4,30 @@ import java.math.BigDecimal;
 
 public class RequestDTO {
     public String customerId;
-    //Name
-    public String customer;
-    //NumAcc
-    public String account;
+
+    public String name;
+
+    public String accountNum;
+
     public BigDecimal balance;
 
-    public RequestDTO(String customerId, String customer, String account, BigDecimal balance) {
+    public String status;
+
+    public RequestDTO(String customerId, String name, String accountNum, BigDecimal balance, String status) {
         this.customerId = customerId;
-        this.customer = customer;
-        this.account = account;
+        this.name = name;
+        this.accountNum = accountNum;
         this.balance = balance;
+        this.status = status;
     }
 
 
-    public String getCustomer() {
-        return customer;
+    public String getName() {
+        return name;
     }
 
-    public String getAccount() {
-        return account;
+    public String getAccountNum() {
+        return accountNum;
     }
 
 
@@ -33,6 +37,10 @@ public class RequestDTO {
 
     public String getCustomerId() {
         return customerId;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
 

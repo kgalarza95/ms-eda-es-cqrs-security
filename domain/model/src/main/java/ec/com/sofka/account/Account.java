@@ -4,6 +4,7 @@ import ec.com.sofka.account.values.AccountId;
 import ec.com.sofka.account.values.objects.Balance;
 import ec.com.sofka.account.values.objects.Name;
 import ec.com.sofka.account.values.objects.NumberAcc;
+import ec.com.sofka.account.values.objects.Status;
 import ec.com.sofka.generics.utils.Entity;
 
 //4. Creation of an Entity class - They have logic and behavior, otherwise is a ValueObject.
@@ -11,13 +12,17 @@ public class Account extends Entity<AccountId> {
     private final Balance balance;
     private final NumberAcc numberAcc;
     private final Name name;
+    private final Status status;
 
-    public Account(AccountId id, Balance balance, NumberAcc numberAcc, Name name) {
+    public Account(AccountId id,  NumberAcc numberAcc, Name name, Balance balance, Status status) {
         super(id);
         this.balance = balance;
         this.numberAcc = numberAcc;
         this.name = name;
+        this.status = status;
     }
+
+
 
     public Balance getBalance() {
         return balance;
@@ -28,6 +33,10 @@ public class Account extends Entity<AccountId> {
     }
     public Name getName() {
         return name;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
 

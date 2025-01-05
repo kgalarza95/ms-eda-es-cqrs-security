@@ -8,4 +8,5 @@ import java.util.List;
 public interface IEventStore {
     DomainEvent save(DomainEvent event);
     List<DomainEvent> findAggregate(String aggregateId);
+    List<DomainEvent> findAllAggregates();
 }

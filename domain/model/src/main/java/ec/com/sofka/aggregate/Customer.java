@@ -1,7 +1,9 @@
 package ec.com.sofka.aggregate;
 
 import ec.com.sofka.account.Account;
+import ec.com.sofka.account.values.AccountId;
 import ec.com.sofka.aggregate.events.AccountCreated;
+import ec.com.sofka.aggregate.events.AccountUpdated;
 import ec.com.sofka.aggregate.values.CustomerId;
 import ec.com.sofka.generics.domain.DomainEvent;
 import ec.com.sofka.generics.utils.AggregateRoot;
@@ -36,18 +38,26 @@ public class Customer extends AggregateRoot<CustomerId> {
         this.account = account;
     }
 
+    //Remember that User as Aggregate is the open door to interact with the entities
+    public void createAccount(String accountNumber, BigDecimal accountBalance, String name, String status) {
+        //Add the event to the aggregate
+        addEvent(new AccountCreated(new AccountId().getValue(), accountNumber,accountBalance,name,status)).apply();
+
+    }
 
     //Remember that User as Aggregate is the open door to interact with the entities
-    public void createAccount(BigDecimal accountBalance, String accountNumber, String name ) {
+    public void updateAccount(String accountId, BigDecimal balance, String accountNumber, String name, String status ) {
         //Add the event to the aggregate
-        addEvent(new AccountCreated(accountNumber,accountBalance, name)).apply();
+        addEvent(new AccountUpdated(accountId, balance, accountNumber, name, status)).apply();
 
     }
 
     //To rebuild the aggregate
     public static Customer from(final String id, List<DomainEvent> events) {
         Customer customer = new Customer(id);
-        events.forEach((event) -> customer.addEvent(event).apply());
+        events.stream()
+                .filter(event -> id.equals(event.getAggregateRootId()))
+                .forEach((event) -> customer.addEvent(event).apply());
         return customer;
     }
 

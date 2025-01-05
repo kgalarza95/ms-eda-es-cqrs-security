@@ -6,15 +6,18 @@ import ec.com.sofka.gateway.IEventStore;
 import ec.com.sofka.generics.domain.DomainEvent;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Repository
 public class EventMongoAdapter implements IEventStore {
 
     private final IEventMongoRepository repository;
-    private final IJSONMapper mapper;
+    private final JSONMap mapper;
     private final MongoTemplate eventMongoTemplate;
 
     public EventMongoAdapter(IEventMongoRepository repository, JSONMap mapper, @Qualifier("eventMongoTemplate")MongoTemplate eventMongoTemplate) {
@@ -29,7 +32,7 @@ public class EventMongoAdapter implements IEventStore {
                 event.getEventId(),
                 event.getAggregateRootId(),
                 event.getEventType(),
-                mapper.writeToJson(event),
+                EventEntity.wrapEvent(event, mapper),
                 event.getWhen().toString(),
                 event.getVersion()
 
@@ -42,7 +45,17 @@ public class EventMongoAdapter implements IEventStore {
     public List<DomainEvent> findAggregate(String aggregateId) {
         List<EventEntity> entities = repository.findByAggregateId(aggregateId);
         return entities.stream()
-                .map(eventEntity -> mapper.readFromJson(eventEntity.getEventData(), DomainEvent.class))
+                .map(eventEntity -> eventEntity.deserializeEvent(mapper))
+                .sorted(Comparator.comparing(DomainEvent::getVersion))
+                .toList();
+    }
+
+    @Override
+    public List<DomainEvent> findAllAggregates() {
+        return repository.findAll().stream()
+                .map(eventEntity ->eventEntity.deserializeEvent(mapper))
+                .sorted(Comparator.comparing(DomainEvent::getAggregateRootId)
+                        .thenComparing(DomainEvent::getVersion, Comparator.reverseOrder()))
                 .toList();
     }
 }

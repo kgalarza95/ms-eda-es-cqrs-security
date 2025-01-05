@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AccountMongoAdapter implements AccountRepository {
 
@@ -22,9 +24,19 @@ public class AccountMongoAdapter implements AccountRepository {
     }
 
     @Override
+    public List<AccountDTO> findAll() {
+        return repository.findAll().stream().map(AccountMapper::toDTO).toList();
+    }
+
+    @Override
     public AccountDTO findByAcccountId(String id) {
         AccountEntity found = repository.findById(id).get();
+        return AccountMapper.toDTO(found);
+    }
 
+    @Override
+    public AccountDTO findByNumber(String number) {
+        AccountEntity found = repository.findByAccountNumber(number);
         return AccountMapper.toDTO(found);
     }
 
@@ -33,5 +45,45 @@ public class AccountMongoAdapter implements AccountRepository {
         AccountEntity a = AccountMapper.toEntity(account);
         AccountEntity saved = repository.save(a);
         return AccountMapper.toDTO(saved);
+    }
+
+    @Override
+    public AccountDTO update(AccountDTO account) {
+        AccountEntity a = AccountMapper.toEntity(account);
+
+        AccountEntity found = repository.findByAccountId(AccountMapper.toEntity(account).getAccountId());
+
+        return found != null ?
+                AccountMapper.toDTO(repository.save(
+                    new AccountEntity(
+                            found.getId(),
+                            found.getAccountId(),
+                            account.getName(),
+                            account.getAccountNumber(),
+                            found.getBalance(),
+                            found.getStatus()
+                        )
+                    )) : null;
+
+
+    }
+
+    @Override
+    public AccountDTO delete(AccountDTO account) {
+        AccountEntity a = AccountMapper.toEntity(account);
+
+        AccountEntity found = repository.findByAccountId(AccountMapper.toEntity(account).getAccountId());
+
+        return found != null ?
+                AccountMapper.toDTO(repository.save(
+                        new AccountEntity(
+                                found.getId(),
+                                found.getAccountId(),
+                                found.getName(),
+                                found.getAccountNumber(),
+                                found.getBalance(),
+                                account.getStatus()
+                        )
+                )) : null;
     }
 }

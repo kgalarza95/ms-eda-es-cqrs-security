@@ -22,6 +22,10 @@ public abstract class DomainEvent {
         this.version = 1L;
     }
 
+    public String getAggregateRootId() {
+        return aggregateRootId;
+    }
+
     public Instant getWhen() {
         return when;
     }
@@ -34,9 +38,7 @@ public abstract class DomainEvent {
         return eventType;
     }
 
-    public String getAggregateRootId() {
-        return aggregateRootId;
-    }
+
 
     public void setAggregateRootId(String aggregateRootId) {
         this.aggregateRootId = aggregateRootId;
