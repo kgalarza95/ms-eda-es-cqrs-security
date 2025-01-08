@@ -10,20 +10,20 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@Configuration
-@EnableMongoRepositories(basePackages = "ec.com.sofka.database.events",
-        mongoTemplateRef = "eventMongoTemplate")
+//@Configuration
+//@EnableMongoRepositories(basePackages = "ec.com.sofka.database.events",
+//        mongoTemplateRef = "eventMongoTemplate")
 public class EventMongoConfig {
 
 
-    @Bean(name = "eventsDatabaseFactory")
-    public MongoDatabaseFactory eventsDatabaseFactory(
-            @Value("${spring.data.mongodb.events-uri}") String uri) {
-        return new SimpleMongoClientDatabaseFactory(uri);
-    }
-
-    @Bean(name = "eventMongoTemplate")
-    public MongoTemplate eventsMongoTemplate(@Qualifier("eventsDatabaseFactory") MongoDatabaseFactory eventsDatabaseFactory) {
-        return new MongoTemplate(eventsDatabaseFactory);
-    }
+//    @Bean(name = "eventsDatabaseFactory")
+//    public MongoDatabaseFactory eventsDatabaseFactory(
+//            @Value("${spring.data.mongodb.events-uri}") String uri) {
+//        return new SimpleMongoClientDatabaseFactory(uri);
+//    }
+//
+//    @Bean(name = "eventMongoTemplate")
+//    public MongoTemplate eventsMongoTemplate(@Qualifier("eventsDatabaseFactory") MongoDatabaseFactory eventsDatabaseFactory) {
+//        return new MongoTemplate(eventsDatabaseFactory);
+//    }
 }

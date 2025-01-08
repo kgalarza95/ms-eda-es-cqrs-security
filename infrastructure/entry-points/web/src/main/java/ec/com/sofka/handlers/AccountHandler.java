@@ -1,15 +1,14 @@
 package ec.com.sofka.handlers;
 
-import ec.com.sofka.*;
-import ec.com.sofka.request.CreateAccountRequest;
-import ec.com.sofka.data.RequestDTO;
-import ec.com.sofka.data.ResponseDTO;
-import ec.com.sofka.request.DeleteAccountRequest;
-import ec.com.sofka.request.GetAccountRequest;
-import ec.com.sofka.request.UpdateAccountRequest;
+import ec.com.sofka.request.account.CreateAccountRequest;
+import ec.com.sofka.dto.AccountRequestDTO;
+import ec.com.sofka.dto.AccountResponseDTO;
+import ec.com.sofka.request.account.GetAccountRequest;
+import ec.com.sofka.request.account.UpdateAccountRequest;
+import ec.com.sofka.usecase.account.*;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Component
 public class AccountHandler {
@@ -27,87 +26,88 @@ public class AccountHandler {
         this.deleteAccountUseCase = deleteAccountUseCase;
     }
 
-    public ResponseDTO createAccount(RequestDTO request){
-        var response = createAccountUseCase.execute(
+    public Mono<AccountResponseDTO> createAccount(AccountRequestDTO request) {
+        return createAccountUseCase.execute(
                 new CreateAccountRequest(
                         request.getAccountNum(),
                         request.getName(),
                         request.getBalance()
-
-                ));
-        return new ResponseDTO(response.getCustomerId(),
-                response.getAccountId(),
-                response.getName(),
-                response.getAccountNumber(),
-                response.getBalance(),
-                response.getStatus());
-    }
-
-    public List<ResponseDTO> getAllAccounts(){
-        var response = getAllAccountsUseCase.get();
-        return response.stream()
-                .map(accountResponse -> new ResponseDTO(
-                        accountResponse.getCustomerId(),
-                        accountResponse.getAccountId(),
-                        accountResponse.getName(),
-                        accountResponse.getAccountNumber(),
-                        accountResponse.getBalance(),
-                        accountResponse.getStatus()
-                        )
-                ).toList();
-    }
-
-    public ResponseDTO getAccountByNumber(RequestDTO request){
-        var response = getAccountByNumberUseCase.execute(
-                new GetAccountRequest(
-                        request.getCustomerId(),
-                        request.getAccountNum()
-                ));
-        return new ResponseDTO(
-                response.getCustomerId(),
-                response.getAccountId(),
-                response.getName(),
-                response.getAccountNumber(),
-                response.getBalance(),
-                response.getStatus());
-    }
-
-    public ResponseDTO updateAccount(RequestDTO request){
-        var response = updateAccountUseCase.execute(
-                new UpdateAccountRequest(
-                        request.getCustomerId(),
-                        request.getBalance(),
-                        request.getAccountNum(),
-                        request.getName(),
-                        request.getStatus()
-                ));
-
-        return new ResponseDTO(
+                )
+        ).map(response -> new AccountResponseDTO(
                 response.getCustomerId(),
                 response.getAccountId(),
                 response.getName(),
                 response.getAccountNumber(),
                 response.getBalance(),
                 response.getStatus()
-        );
+        ));
     }
 
-    public ResponseDTO deleteAccount(RequestDTO request){
-        var response = deleteAccountUseCase.execute(
+
+    public Flux<AccountResponseDTO> getAllAccounts() {
+        return getAllAccountsUseCase.get()
+                .map(accountResponse -> new AccountResponseDTO(
+                        accountResponse.getCustomerId(),
+                        accountResponse.getAccountId(),
+                        accountResponse.getName(),
+                        accountResponse.getAccountNumber(),
+                        accountResponse.getBalance(),
+                        accountResponse.getStatus()
+                ));
+    }
+
+    public Mono<AccountResponseDTO> getAccountByNumber(AccountRequestDTO request) {
+        return getAccountByNumberUseCase.execute(
+                new GetAccountRequest(
+                        request.getCustomerId(),
+                        request.getAccountNum()
+                )
+        ).map(response -> new AccountResponseDTO(
+                response.getCustomerId(),
+                response.getAccountId(),
+                response.getName(),
+                response.getAccountNumber(),
+                response.getBalance(),
+                response.getStatus()
+        ));
+    }
+
+    public Mono<AccountResponseDTO> updateAccount(AccountRequestDTO request) {
+        return updateAccountUseCase.execute(
                 new UpdateAccountRequest(
                         request.getCustomerId(),
                         request.getBalance(),
                         request.getAccountNum(),
                         request.getName(),
                         request.getStatus()
-
-                ));
-        return new ResponseDTO(
+                )
+        ).map(response -> new AccountResponseDTO(
                 response.getCustomerId(),
                 response.getAccountId(),
                 response.getName(),
                 response.getAccountNumber(),
                 response.getBalance(),
-                response.getStatus());
+                response.getStatus()
+        ));
     }
+
+    public Mono<AccountResponseDTO> deleteAccount(AccountRequestDTO request) {
+        return deleteAccountUseCase.execute(
+                new UpdateAccountRequest(
+                        request.getCustomerId(),
+                        request.getBalance(),
+                        request.getAccountNum(),
+                        request.getName(),
+                        request.getStatus()
+                )
+        ).map(response -> new AccountResponseDTO(
+                response.getCustomerId(),
+                response.getAccountId(),
+                response.getName(),
+                response.getAccountNumber(),
+                response.getBalance(),
+                response.getStatus()
+        ));
+    }
+
 }

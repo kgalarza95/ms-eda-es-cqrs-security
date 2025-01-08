@@ -39,7 +39,14 @@ public class DomainActionsHandler {
             action.accept(event);
             long version = increaseVersion(event);
             event.setVersion(version);
-        }catch(Exception ignored){}
+        }catch(Exception ignored){
+            System.out.println(ignored);
+            if (ignored instanceof ClassCastException) {
+                System.err.println("ClassCastException controlada: " + ignored.getMessage());
+            } else {
+                throw ignored;
+            }
+        }
     }
 
     private void apply(final DomainEvent event){
