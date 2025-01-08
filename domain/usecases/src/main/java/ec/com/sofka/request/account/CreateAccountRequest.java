@@ -5,8 +5,8 @@ import ec.com.sofka.model.util.StatusEnum;
 
 import java.math.BigDecimal;
 
-//Usage of the Request class
 public class CreateAccountRequest extends Request {
+
     private final BigDecimal balance;
     private final String numberAcc;
     private final String customerName;

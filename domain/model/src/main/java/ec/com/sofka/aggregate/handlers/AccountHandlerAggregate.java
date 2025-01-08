@@ -1,5 +1,6 @@
-package ec.com.sofka.aggregate;
+package ec.com.sofka.aggregate.handlers;
 
+import ec.com.sofka.aggregate.CustomerAggregate;
 import ec.com.sofka.model.account.Account;
 import ec.com.sofka.model.account.values.AccountId;
 import ec.com.sofka.model.account.values.objects.Balance;

@@ -11,7 +11,6 @@ import ec.com.sofka.responses.account.CreateAccountResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-//Usage of the IUseCase interface
 public class CreateAccountUseCase implements IUseCaseExecute<CreateAccountRequest, CreateAccountResponse> {
     private final IEventStoreGateway eventRepository;
     private final IAccountRepositoryGateway iAccountRepositoryGateway;

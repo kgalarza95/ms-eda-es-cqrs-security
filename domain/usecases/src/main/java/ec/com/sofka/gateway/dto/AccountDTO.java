@@ -31,17 +31,13 @@ public class AccountDTO {
         return id;
     }
 
-
-
     public String getAccountNumber() {
         return accountNumber;
     }
 
-
     public String getName() {
         return name;
     }
-
 
     public BigDecimal getBalance() {
         return balance;
@@ -49,5 +45,25 @@ public class AccountDTO {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

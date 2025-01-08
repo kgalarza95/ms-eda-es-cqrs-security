@@ -1,4 +1,4 @@
-package ec.com.sofka.repository;
+package ec.com.sofka.repository.mongo;
 
 import ec.com.sofka.document.AccountEntity;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

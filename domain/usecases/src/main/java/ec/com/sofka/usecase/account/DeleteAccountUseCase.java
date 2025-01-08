@@ -49,7 +49,6 @@ public class DeleteAccountUseCase implements IUseCaseExecute<UpdateAccountReques
                     return IAccountRepositoryGateway.delete(accountDTO)
                             .flatMap(result -> {
                                 if (result != null) {
-                                    // Guarda los eventos no confirmados
                                     return Flux.fromIterable(customer.getUncommittedEvents())
                                             .flatMap(eventRepository::save)
                                             .then(Mono.fromCallable(() -> {
@@ -72,45 +71,4 @@ public class DeleteAccountUseCase implements IUseCaseExecute<UpdateAccountReques
     }
 
 
-//    @Override
-//    public UpdateAccountResponse execute(UpdateAccountRequest request) {
-//        //Get events related to the aggregateId on the request
-//        List<DomainEvent> events = eventRepository.findAggregate(request.getAggregateId());
-//
-//        //Rebuild the aggregate
-//        CustomerAggregate customer = CustomerAggregate.from(request.getAggregateId(),events);
-//
-//        customer.updateAccount(
-//                customer.getAccount().getId().getValue(),
-//                customer.getAccount().getBalance().getValue(),
-//                customer.getAccount().getNumber().getValue(),
-//                customer.getAccount().getName().getValue(),
-//                StatusEnum.INACTIVE.name()
-//        );
-//
-//        //"Delete" the account
-//        AccountDTO result = accountRepositoryGateway.delete(
-//                new AccountDTO(customer.getAccount().getId().getValue(),
-//                        customer.getAccount().getNumber().getValue(),
-//                        customer.getAccount().getName().getValue(),
-//                        customer.getAccount().getBalance().getValue(),
-//                        customer.getAccount().getStatus().getValue()
-//                ));
-//
-//        if (result != null) {
-//            //Last step for events to be saved
-//            customer.getUncommittedEvents().forEach(eventRepository::save);
-//
-//            customer.markEventsAsCommitted();
-//
-//            return new UpdateAccountResponse(
-//                    request.getAggregateId(),
-//                    result.getId(),
-//                    result.getAccountNumber(),
-//                    result.getName(),
-//                    result.getStatus());
-//        }
-//
-//        return new UpdateAccountResponse();
-//    }
 }

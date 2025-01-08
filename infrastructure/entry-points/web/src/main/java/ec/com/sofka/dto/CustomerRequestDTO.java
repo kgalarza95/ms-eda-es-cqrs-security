@@ -3,6 +3,8 @@ package ec.com.sofka.dto;
 import java.time.LocalDate;
 
 public class CustomerRequestDTO {
+
+    private String aggregateId;
     private String identification;
     private String firstName;
     private String lastName;
@@ -11,7 +13,8 @@ public class CustomerRequestDTO {
     private String address;
     private LocalDate birthDate;
 
-    public CustomerRequestDTO(String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate) {
+    public CustomerRequestDTO(String aggregateId, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate) {
+        this.aggregateId = aggregateId;
         this.identification = identification;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,5 +81,9 @@ public class CustomerRequestDTO {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getAggregateId() {
+        return aggregateId;
     }
 }

@@ -9,11 +9,11 @@ import ec.com.sofka.responses.account.GetAccountResponse;
 import reactor.core.publisher.Mono;
 
 public class GetAccountByNumberUseCase implements IUseCaseExecute<GetAccountRequest, GetAccountResponse> {
-    private final IAccountRepositoryGateway IAccountRepositoryGateway;
+    private final IAccountRepositoryGateway iAccountRepositoryGateway;
     private final IEventStoreGateway eventRepository;
 
     public GetAccountByNumberUseCase(IAccountRepositoryGateway IAccountRepositoryGateway, IEventStoreGateway eventRepository) {
-        this.IAccountRepositoryGateway = IAccountRepositoryGateway;
+        this.iAccountRepositoryGateway = IAccountRepositoryGateway;
         this.eventRepository = eventRepository;
     }
 
@@ -25,7 +25,7 @@ public class GetAccountByNumberUseCase implements IUseCaseExecute<GetAccountRequ
 
                     CustomerAggregate customer = CustomerAggregate.from(request.getAggregateId(), events);
 
-                    return IAccountRepositoryGateway.findByNumber(customer.getAccount().getNumber().getValue())
+                    return iAccountRepositoryGateway.findByNumber(customer.getAccount().getNumber().getValue())
                             .map(result -> {
                                 return new GetAccountResponse(
                                         request.getAggregateId(),

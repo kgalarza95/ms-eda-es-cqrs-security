@@ -1,10 +1,12 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.aggregate.events;
 
-import ec.com.sofka.model.customer.values.objects.*;
+import ec.com.sofka.aggregate.events.util.CustomerEventsEnum;
+import ec.com.sofka.generics.domain.DomainEvent;
 
 import java.time.LocalDate;
 
-public class CustomerDTO {
+public class CustomerUpdated extends DomainEvent {
+
     private String id;
     private String identification;
     private String firstName;
@@ -15,7 +17,8 @@ public class CustomerDTO {
     private LocalDate birthDate;
     private String status;
 
-    public CustomerDTO(String id, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate, String status) {
+    public CustomerUpdated(String id, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate, String status) {
+        super(CustomerEventsEnum.CUSTOMER_CREATED.name());
         this.id = id;
         this.identification = identification;
         this.firstName = firstName;
@@ -27,78 +30,43 @@ public class CustomerDTO {
         this.status = status;
     }
 
-    public CustomerDTO() {
+    public CustomerUpdated() {
+        super(CustomerEventsEnum.CUSTOMER_UPDATED.name());
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getIdentification() {
         return identification;
-    }
-
-    public void setIdentification(String identification) {
-        this.identification = identification;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

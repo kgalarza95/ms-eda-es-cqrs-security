@@ -17,8 +17,9 @@ public class CustomerCreated extends DomainEvent {
     private String phone;
     private String address;
     private LocalDate birthDate;
+    private String status;
 
-    public CustomerCreated(String id, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate) {
+    public CustomerCreated(String id, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate, String status) {
         super(CustomerEventsEnum.CUSTOMER_CREATED.name());
         this.id = id;
         this.identification = identification;
@@ -28,6 +29,7 @@ public class CustomerCreated extends DomainEvent {
         this.phone = phone;
         this.address = address;
         this.birthDate = birthDate;
+        this.status = status;
     }
 
     public CustomerCreated() {
@@ -64,5 +66,9 @@ public class CustomerCreated extends DomainEvent {
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

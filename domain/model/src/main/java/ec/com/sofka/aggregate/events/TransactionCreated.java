@@ -1,11 +1,14 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.aggregate.events;
 
-import ec.com.sofka.model.transaction.values.objects.*;
+import ec.com.sofka.aggregate.events.util.CustomerEventsEnum;
+import ec.com.sofka.aggregate.events.util.TransactionEventsEnum;
+import ec.com.sofka.generics.domain.DomainEvent;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TransactionDTO {
+public class TransactionCreated extends DomainEvent {
+
     private String id;
     private String description;
     private BigDecimal amount;
@@ -13,7 +16,8 @@ public class TransactionDTO {
     private LocalDate date;
     private String accountId;
 
-    public TransactionDTO(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
+    public TransactionCreated(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
+        super(TransactionEventsEnum.TRANSACTION_CREATED.name());
         this.id = id;
         this.description = description;
         this.amount = amount;
@@ -22,54 +26,31 @@ public class TransactionDTO {
         this.accountId = accountId;
     }
 
-    public TransactionDTO() {
+    public TransactionCreated(String eventType) {
+        super(TransactionEventsEnum.TRANSACTION_CREATED.name());
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public String getTransactionType() {
         return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public String getAccountId() {
         return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
     }
 }

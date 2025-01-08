@@ -1,11 +1,15 @@
-package ec.com.sofka.gateway.dto;
+package ec.com.sofka.document;
 
-import ec.com.sofka.model.transaction.values.objects.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TransactionDTO {
+@Document(collection = "transactions")
+public class TransactionEntity {
+
+    @Id
     private String id;
     private String description;
     private BigDecimal amount;
@@ -13,16 +17,7 @@ public class TransactionDTO {
     private LocalDate date;
     private String accountId;
 
-    public TransactionDTO(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
-        this.id = id;
-        this.description = description;
-        this.amount = amount;
-        this.transactionType = transactionType;
-        this.date = date;
-        this.accountId = accountId;
-    }
-
-    public TransactionDTO() {
+    public TransactionEntity() {
     }
 
     public String getId() {

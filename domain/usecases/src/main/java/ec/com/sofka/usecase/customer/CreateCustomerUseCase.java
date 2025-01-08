@@ -29,7 +29,7 @@ public class CreateCustomerUseCase implements IUseCaseExecute<CreateCustomerRequ
     public Mono<CreateCustomerResponse> execute(CreateCustomerRequest request) {
         CustomerAggregate customer = new CustomerAggregate();
 
-        customer.createCustomer(request.getIdentification(), request.getFirstName(), request.getLastName(), request.getEmail(), request.getPhone(), request.getAddress(), request.getBirthDate());
+        customer.createCustomer(request.getIdentification(), request.getFirstName(), request.getLastName(), request.getEmail(), request.getPhone(), request.getAddress(), request.getBirthDate(), request.getStatus());
 
         CustomerDTO customerDTO = new CustomerDTO(
                 customer.getCustomer().getId().getValue(),
@@ -39,7 +39,8 @@ public class CreateCustomerUseCase implements IUseCaseExecute<CreateCustomerRequ
                 customer.getCustomer().getEmail().getValue(),
                 customer.getCustomer().getPhone().getValue(),
                 customer.getCustomer().getAddress().getValue(),
-                customer.getCustomer().getBirthDate().getValue()
+                customer.getCustomer().getBirthDate().getValue(),
+                customer.getCustomer().getStatus().getValue()
         );
 
         return iCustomerRepositoryGateway.save(customerDTO)

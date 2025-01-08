@@ -37,9 +37,9 @@ public class CustomerRouter {
     public RouterFunction<ServerResponse> route() {
         return RouterFunctions.route()
                 .POST("/v1/api/customers", this::saveCustomer)
-                .PUT("/v1/api/customers", this::saveCustomer)
-//                .GET("/v1/api/customers/{id}", this::getCustomerById)
-//                .GET("/v1/api/customers", this::getAllCustomers)
+                .PUT("/v1/api/customers", this::updateCustomer)
+                .GET("/v1/api/customers/{id}", this::getCustomerById)
+                .GET("/v1/api/customers", this::getAllCustomers)
 //                .DELETE("/v1/api/customers/{id}", this::deleteCustomer)
                 .build();
     }
@@ -51,27 +51,29 @@ public class CustomerRouter {
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(customerOutDTO));
     }
+    public Mono<ServerResponse> updateCustomer(ServerRequest request) {
+        return request.bodyToMono(CustomerRequestDTO.class)
+                .flatMap(customerHandler::updateCustomer)
+                .flatMap(customerOutDTO -> ServerResponse.status(HttpStatus.CREATED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(customerOutDTO));
+    }
 
-//    public Mono<ServerResponse> getCustomerById(ServerRequest request) {
-//        String id = request.pathVariable("id");
-//        return customerHandler.findCustomerById(id)
-//                .flatMap(customerOutDTO -> ServerResponse.ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .bodyValue(customerOutDTO))
-//                .switchIfEmpty(ServerResponse.notFound().build());
-//    }
-//
-//    public Mono<ServerResponse> getAllCustomers(ServerRequest request) {
-//        return customerHandler.findAllCustomers()
-//                .collectList()
-//                .flatMap(customers -> ServerResponse.ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .bodyValue(customers));
-//    }
-//
-//    public Mono<ServerResponse> deleteCustomer(ServerRequest request) {
-//        String id = request.pathVariable("id");
-//        return customerHandler.deleteCustomerById(id)
-//                .then(ServerResponse.noContent().build());
-//    }
+    public Mono<ServerResponse> getAllCustomers(ServerRequest request) {
+        return customerHandler.getAllCustomer()
+                .collectList()
+                .flatMap(customers -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(customers));
+    }
+
+    public Mono<ServerResponse> getCustomerById(ServerRequest request) {
+        String id = request.pathVariable("id");
+        return customerHandler.getCustomerById(id)
+                .flatMap(customerOutDTO -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(customerOutDTO))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
 }

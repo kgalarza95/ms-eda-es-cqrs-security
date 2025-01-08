@@ -1,13 +1,9 @@
-package ec.com.sofka.request.customer;
-
-import ec.com.sofka.generics.utils.Request;
-import ec.com.sofka.model.util.StatusEnum;
+package ec.com.sofka.responses.customer;
 
 import java.time.LocalDate;
 
-//Usage of the Request class
-public class CreateCustomerRequest extends Request {
-
+public class GetCustomerResponse {
+    private String id;
     private String identification;
     private String firstName;
     private String lastName;
@@ -15,11 +11,10 @@ public class CreateCustomerRequest extends Request {
     private String phone;
     private String address;
     private LocalDate birthDate;
-    private String status;
+    private final String status;
 
-
-    public CreateCustomerRequest(String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate) {
-        super(null);
+    public GetCustomerResponse(String id, String identification, String firstName, String lastName, String email, String phone, String address, LocalDate birthDate, String status) {
+        this.id = id;
         this.identification = identification;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,7 +22,11 @@ public class CreateCustomerRequest extends Request {
         this.phone = phone;
         this.address = address;
         this.birthDate = birthDate;
-        this.status = StatusEnum.ACTIVE.name();
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getIdentification() {
@@ -58,7 +57,5 @@ public class CreateCustomerRequest extends Request {
         return birthDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getStatus() {return status; }
 }

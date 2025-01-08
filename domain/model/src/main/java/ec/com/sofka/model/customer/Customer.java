@@ -1,6 +1,7 @@
 package ec.com.sofka.model.customer;
 
 import ec.com.sofka.generics.utils.Entity;
+import ec.com.sofka.model.account.values.objects.Status;
 import ec.com.sofka.model.customer.values.CustomerID;
 import ec.com.sofka.model.customer.values.objects.*;
 
@@ -13,8 +14,9 @@ public class Customer extends Entity<CustomerID> {
     private final Phone phone;
     private final Address address;
     private final BirthDate birthDate;
+    private final Status status;
 
-    public Customer(CustomerID id, Identification identification, Name firstName, Name lastName, Email email, Phone phone, Address address, BirthDate birthDate) {
+    public Customer(CustomerID id, Identification identification, Name firstName, Name lastName, Email email, Phone phone, Address address, BirthDate birthDate, Status status) {
         super(id);
         this.identification = identification;
         this.firstName = firstName;
@@ -23,6 +25,7 @@ public class Customer extends Entity<CustomerID> {
         this.phone = phone;
         this.address = address;
         this.birthDate = birthDate;
+        this.status = status;
     }
 
     public Identification getIdentification() {
@@ -51,5 +54,9 @@ public class Customer extends Entity<CustomerID> {
 
     public BirthDate getBirthDate() {
         return birthDate;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

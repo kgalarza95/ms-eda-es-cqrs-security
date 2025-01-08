@@ -1,22 +1,26 @@
-package ec.com.sofka;
+package ec.com.sofka.adapter;
 
 import ec.com.sofka.document.AccountEntity;
-import ec.com.sofka.repository.IAccountMongoRepository;
+import ec.com.sofka.repository.mongo.IAccountMongoRepository;
 import ec.com.sofka.gateway.IAccountRepositoryGateway;
 import ec.com.sofka.gateway.dto.AccountDTO;
 import ec.com.sofka.mapper.AccountRepoMapper;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-public class IAccountMongoAdapterGateway implements IAccountRepositoryGateway {
+public class AccountMongoAdapterGateway implements IAccountRepositoryGateway {
 
     private final IAccountMongoRepository repository;
+    private final ReactiveMongoTemplate accountReactiveMongoTemplate;
 
-    public IAccountMongoAdapterGateway(IAccountMongoRepository repository) {
+    public AccountMongoAdapterGateway(IAccountMongoRepository repository, ReactiveMongoTemplate accountReactiveMongoTemplate) {
         this.repository = repository;
+        this.accountReactiveMongoTemplate = accountReactiveMongoTemplate;
     }
+
 
     @Override
     public Flux<AccountDTO> findAll() {

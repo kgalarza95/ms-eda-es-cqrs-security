@@ -1,11 +1,10 @@
-package ec.com.sofka.gateway.dto;
-
-import ec.com.sofka.model.transaction.values.objects.*;
+package ec.com.sofka.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TransactionDTO {
+public class TransactionInDTO {
+
     private String id;
     private String description;
     private BigDecimal amount;
@@ -13,16 +12,15 @@ public class TransactionDTO {
     private LocalDate date;
     private String accountId;
 
-    public TransactionDTO(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
+    public TransactionInDTO() {}
+
+    public TransactionInDTO(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.transactionType = transactionType;
         this.date = date;
         this.accountId = accountId;
-    }
-
-    public TransactionDTO() {
     }
 
     public String getId() {

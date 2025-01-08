@@ -1,26 +1,24 @@
-package ec.com.sofka;
+package ec.com.sofka.adapter;
 
-import ec.com.sofka.document.AccountEntity;
 import ec.com.sofka.document.ClientEntity;
-import ec.com.sofka.gateway.IAccountRepositoryGateway;
 import ec.com.sofka.gateway.ICustomerRepositoryGateway;
-import ec.com.sofka.gateway.dto.AccountDTO;
 import ec.com.sofka.gateway.dto.CustomerDTO;
-import ec.com.sofka.mapper.AccountRepoMapper;
 import ec.com.sofka.mapper.CustomerRepoMapper;
-import ec.com.sofka.repository.IAccountMongoRepository;
-import ec.com.sofka.repository.ICustomerMongoRepository;
+import ec.com.sofka.repository.mongo.ICustomerMongoRepository;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-public class ICustomerMongoAdapterGateway implements ICustomerRepositoryGateway {
+public class CustomerMongoAdapterGateway implements ICustomerRepositoryGateway {
 
     private final ICustomerMongoRepository iCustomerMongoRepository;
+    private final ReactiveMongoTemplate accountReactiveMongoTemplate;
 
-    public ICustomerMongoAdapterGateway(ICustomerMongoRepository iCustomerMongoRepository) {
+    public CustomerMongoAdapterGateway(ICustomerMongoRepository iCustomerMongoRepository, ReactiveMongoTemplate accountReactiveMongoTemplate) {
         this.iCustomerMongoRepository = iCustomerMongoRepository;
+        this.accountReactiveMongoTemplate = accountReactiveMongoTemplate;
     }
 
     @Override
