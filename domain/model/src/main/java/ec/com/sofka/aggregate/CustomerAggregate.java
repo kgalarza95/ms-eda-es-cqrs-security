@@ -79,6 +79,7 @@ public class CustomerAggregate extends AggregateRoot<CustomerId> {
                 .filter(event -> id.equals(event.getAggregateRootId()))
                 .reduce((first, second) -> second)
                 .ifPresent(event -> customer.addEvent(event).apply());
+        customer.markEventsAsCommitted();
         return customer;
     }
 

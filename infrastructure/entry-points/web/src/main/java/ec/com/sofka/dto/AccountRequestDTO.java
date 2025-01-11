@@ -11,14 +11,11 @@ public class AccountRequestDTO {
 
     public BigDecimal balance;
 
-    public String status;
-
-    public AccountRequestDTO(String customerId, String name, String accountNum, BigDecimal balance, String status) {
+    public AccountRequestDTO(String customerId, String name, String accountNum, BigDecimal balance) {
         this.customerId = customerId;
         this.name = name;
         this.accountNum = accountNum;
         this.balance = balance;
-        this.status = status;
     }
 
     public String getName() {
@@ -36,10 +33,5 @@ public class AccountRequestDTO {
     public String getCustomerId() {
         return customerId;
     }
-
-    public String getStatus() {
-        return status;
-    }
-
 
 }

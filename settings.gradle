@@ -17,3 +17,6 @@ findProject(':web').projectDir = file('./infrastructure/entry-points/web')
 
 include ':serializer'
 findProject(':serializer').projectDir = file('./infrastructure/helpers/serializer')
+
+include 'rabbit-info-bus'
+findProject(':rabbit-info-bus').projectDir = file('./infrastructure/driven-adapters/rabbit-info-bus')

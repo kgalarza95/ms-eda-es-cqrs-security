@@ -1,14 +1,11 @@
 package ec.com.sofka.handlers;
 
 
-import ec.com.sofka.dto.CustomerRequestDTO;
-import ec.com.sofka.dto.CustomerResponseDTO;
 import ec.com.sofka.dto.TransactionInDTO;
 import ec.com.sofka.dto.TransactionOutDTO;
-import ec.com.sofka.request.customer.CreateCustomerRequest;
-import ec.com.sofka.request.transaction.CreateTransactionRequest;
-import ec.com.sofka.usecase.transaction.SaveTransactionUseCase;
-import ec.com.sofka.usecase.util.TransactionCost;
+import ec.com.sofka.commands.transaction.CreateTransactionCommand;
+import ec.com.sofka.commands.usecase.transaction.SaveTransactionUseCase;
+import ec.com.sofka.commands.usecase.util.TransactionCost;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -59,7 +56,7 @@ public class TransactionHandler {
     private Mono<TransactionOutDTO> processTransaction(TransactionInDTO request, double transactionCost, boolean isDeposit) {
         request.setDate(LocalDate.now());
         return saveTransactionUseCase.execute(
-                new CreateTransactionRequest(
+                new CreateTransactionCommand(
                         request.getAccountId(),
                         request.getDescription(),
                         request.getAmount(),

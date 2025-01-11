@@ -48,13 +48,6 @@ public class EventMongoAdapterGateway implements IEventStoreGateway {
                 .sort(Comparator.comparing(DomainEvent::getVersion));
     }
 
-    @Override
-    public Mono<DomainEvent> findAggregateUnique(String aggregateId) {
-        return iEventMongoRepository.findByAggregateId(aggregateId)
-                .map(eventEntity -> eventEntity.deserializeEvent(mapper))
-                .last();
-    }
-
 
     @Override
     public Flux<DomainEvent> findAllAggregates() {

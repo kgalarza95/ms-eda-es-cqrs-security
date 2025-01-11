@@ -1,10 +1,12 @@
 package ec.com.sofka.generics.domain;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
 //4. Generics creation to apply DDD: DomainEvent - An event that occurs in the domain
-public abstract class DomainEvent {
+public abstract class DomainEvent implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final Instant when;
     private final String eventId;
     private final String eventType;
