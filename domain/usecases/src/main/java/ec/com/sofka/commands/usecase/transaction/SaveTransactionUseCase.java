@@ -38,10 +38,10 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
         this.iTransactionBusMessageGateway = iTransactionBusMessageGateway;
     }
 
+
     @Override
     public Mono<CreateTransactionResponse> execute(CreateTransactionCommand request) {
 
-        System.out.println("init the transaction");
 
         CustomerAggregate transactionAggregate = new CustomerAggregate();
         BigDecimal transactionCostBD = new BigDecimal(request.getTransactionCost());
@@ -59,7 +59,6 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
                 .collectList()
                 .flatMap(events -> {
 
-                    System.out.println("2");
 
                     if (events.isEmpty()) {
                         return Mono.error(new ResourceNotFoundException("No events found for aggregate ID: " + request.getAggregateId()));
@@ -73,14 +72,6 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
                             request.getAccountId()
                     );
 
-                    DomainEvent transactionEvent = new TransactionCreated(
-                            transactionAggregate.getTransaction().getId().getValue(),
-                            transactionAggregate.getTransaction().getDescription().getValue(),
-                            transactionAggregate.getTransaction().getAmount().getValue(),
-                            transactionAggregate.getTransaction().getTransactionType().getValue(),
-                            transactionAggregate.getTransaction().getDate().getValue(),
-                            transactionAggregate.getTransaction().getAccountId().getValue()
-                    );
 
                     CustomerAggregate customer = CustomerAggregate.from(request.getAggregateId(), events);
 
@@ -95,10 +86,7 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
                                     return Mono.error(new InsufficientBalanceException("Insufficient balance for the transaction."));
                                 }
 
-                                // Actualiza el saldo de la cuenta antes de guardar el evento
                                 account.setBalance(account.getBalance().add(affectedBalance));
-
-                                // Guarda el evento de transacción
 
                                 return iAccountRepositoryGateway.update(account)
                                         .then(Flux.fromIterable(transactionAggregate.getUncommittedEvents())
@@ -120,128 +108,12 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
                                         }));
 
 
-//                                return iAccountRepositoryGateway.update(account)
-//                                        .then(Flux.fromIterable(transactionAggregate.getUncommittedEvents())
-//                                                .flatMap(iEventStoreGateway::save)
-//                                                .then())
-//                                        .then(Mono.fromCallable(() -> {
-//                                            transactionAggregate.markEventsAsCommitted();
-//                                            return new CreateTransactionResponse(
-//                                                    transactionAggregate.getTransaction().getId().getValue(),
-//                                                    transactionAggregate.getTransaction().getDescription().getValue(),
-//                                                    account.getBalance(),
-//                                                    transactionAggregate.getTransaction().getTransactionType().getValue(),
-//                                                    transactionAggregate.getTransaction().getDate().getValue(),
-//                                                    transactionAggregate.getTransaction().getAccountId().getValue()
-//                                            );
-//                                        }));
-
-//                                return iEventStoreGateway.save(transactionEvent)  // Guarda primero el evento
-//                                        .then(iAccountRepositoryGateway.update(account))  // Luego, actualiza la cuenta
-//                                        .then(Mono.fromCallable(() -> {
-//                                            System.out.println("4");
-//                                            // Envía el mensaje al bus de eventos después de guardar
-//                                            iTransactionBusMessageGateway.sendMsg(transactionEvent);
-//
-//                                            transactionAggregate.markEventsAsCommitted();
-//
-//                                            System.out.println("5");
-//                                            // Devuelve la respuesta al usuario
-//                                            return new CreateTransactionResponse(
-//                                                    request.getAggregateId(),
-//                                                    transactionAggregate.getTransaction().getDescription().getValue(),
-//                                                    account.getBalance(),
-//                                                    transactionAggregate.getTransaction().getTransactionType().getValue(),
-//                                                    transactionAggregate.getTransaction().getDate().getValue(),
-//                                                    transactionAggregate.getTransaction().getAccountId().getValue()
-//                                            );
-//                                        }));
                             });
                 });
     }
 
 
 
-//    @Override
-//    public Mono<CreateTransactionResponse> execute(CreateTransactionCommand request) {
-//
-//        CustomerAggregate transactionAggregate = new CustomerAggregate();
-//
-//
-//        BigDecimal transactionCostBD = new BigDecimal(request.getTransactionCost());
-//
-//        Function<AccountDTO, BigDecimal> calculateAffectedBalance = account -> {
-//            BigDecimal amount = request.getAmount();
-//            return request.isDeposit()
-//                    ? amount.subtract(transactionCostBD)
-//                    : amount.negate().subtract(transactionCostBD);
-//        };
-//
-//        Predicate<BigDecimal> validBalance = balance -> balance.compareTo(BigDecimal.ZERO) >= 0;
-//
-//        return iEventStoreGateway.findAggregate(request.getAggregateId())
-//                .collectList()
-//                .flatMap(events -> {
-//
-//                    if (events.isEmpty()) {
-//                        return Mono.error(new ResourceNotFoundException("No events found for aggregate ID: " + request.getAggregateId()));
-//                    }
-//
-//                    transactionAggregate.createTransaction(
-//                            request.getDescription(),
-//                            request.getAmount(),
-//                            request.getTransactionType(),
-//                            request.getDate(),
-//                            request.getAccountId()
-//                    );
-//
-//                    DomainEvent transactionEvent = new TransactionCreated(
-//                            transactionAggregate.getTransaction().getId().getValue(),
-//                            transactionAggregate.getTransaction().getDescription().getValue(),
-//                            transactionAggregate.getTransaction().getAmount().getValue(),
-//                            transactionAggregate.getTransaction().getTransactionType().getValue(),
-//                            transactionAggregate.getTransaction().getDate().getValue(),
-//                            transactionAggregate.getTransaction().getAccountId().getValue()
-//                    );
-//
-//                    CustomerAggregate customer = CustomerAggregate.from(request.getAggregateId(), events);
-//
-//                    return iAccountRepositoryGateway.findByNumber(customer.getAccount().getNumber().getValue())
-//                            .switchIfEmpty(Mono.error(new ResourceNotFoundException("Account not found with ID: " + request.getAccountId())))
-//                            .flatMap(account -> {
-//
-//                                BigDecimal affectedBalance = calculateAffectedBalance.apply(account);
-//
-//                                if (!validBalance.test(account.getBalance().add(affectedBalance))) {
-//                                    return Mono.error(new InsufficientBalanceException("Insufficient balance for the transaction."));
-//                                }
-//
-//                                account.setBalance(account.getBalance().add(affectedBalance));
-//
-//
-//                                //++++++=+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//                                return iAccountRepositoryGateway.update(account)
-//                                        .then(Mono.fromCallable(() -> {
-//                                            iTransactionBusMessageGateway.sendMsg(transactionEvent);
-//
-//                                            transactionAggregate.markEventsAsCommitted();
-//
-//                                            return new CreateTransactionResponse(
-//                                                    request.getAggregateId(),
-//                                                    transactionAggregate.getTransaction().getDescription().getValue(),
-//                                                    transactionAggregate.getTransaction().getAmount().getValue(),
-//                                                    transactionAggregate.getTransaction().getTransactionType().getValue(),
-//                                                    transactionAggregate.getTransaction().getDate().getValue(),
-//                                                    transactionAggregate.getTransaction().getAccountId().getValue()
-//                                            );
-//
-//                                        }));
-//
-//                            });
-//                });
-//
-//    }
 
 
 }

@@ -29,6 +29,9 @@ public class AccountResponseDTO {
         this.status = status;
     }
 
+    public AccountResponseDTO() {
+    }
+
     public String getAccountId() {
         return accountId;
     }

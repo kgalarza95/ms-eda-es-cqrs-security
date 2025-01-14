@@ -20,43 +20,87 @@ public class CreateUserSystemUseCase {
         this.iUserRepositoryGateway = iUserRepositoryGateway;
     }
 
-   public Mono<CreateUserAdminResponse> save(CreateUserSystemCommand createUserSystemCommand){
-        UserSystemAggregate userSystemAggregate = new UserSystemAggregate();
 
-        userSystemAggregate.createUserSystem(
-                createUserSystemCommand.getFirstname(),
-                createUserSystemCommand.getLastname(),
-                createUserSystemCommand.getEmail(),
-                createUserSystemCommand.getPassword(),
-                createUserSystemCommand.getRole());
+    public Mono<CreateUserAdminResponse> save(CreateUserSystemCommand createUserSystemCommand) {
+        return iUserRepositoryGateway.findByEmail(createUserSystemCommand.getEmail())
+                .flatMap(existingUser -> Mono.error(new IllegalArgumentException("El correo ya está registrado.")))
+                .switchIfEmpty(Mono.defer(() -> {
+                    UserSystemAggregate userSystemAggregate = new UserSystemAggregate();
 
-        UserAdminDTO userAdminDTO = new UserAdminDTO(
-                userSystemAggregate.getUserSystem().getId().getValue(),
-                userSystemAggregate.getUserSystem().getFirstname().getValue(),
-                userSystemAggregate.getUserSystem().getLastname().getValue(),
-                userSystemAggregate.getUserSystem().getEmail().getValue(),
-                userSystemAggregate.getUserSystem().getPassword().getValue(),
-                userSystemAggregate.getUserSystem().getRole().name()
-        );
+                    userSystemAggregate.createUserSystem(
+                            createUserSystemCommand.getFirstname(),
+                            createUserSystemCommand.getLastname(),
+                            createUserSystemCommand.getEmail(),
+                            createUserSystemCommand.getPassword(),
+                            createUserSystemCommand.getRole());
 
-        return iUserRepositoryGateway.save(userAdminDTO)
-                .flatMap(result -> {
+                    UserAdminDTO userAdminDTO = new UserAdminDTO(
+                            userSystemAggregate.getUserSystem().getId().getValue(),
+                            userSystemAggregate.getUserSystem().getFirstname().getValue(),
+                            userSystemAggregate.getUserSystem().getLastname().getValue(),
+                            userSystemAggregate.getUserSystem().getEmail().getValue(),
+                            userSystemAggregate.getUserSystem().getPassword().getValue(),
+                            userSystemAggregate.getUserSystem().getRole().name()
+                    );
 
-                    return Flux.fromIterable(userSystemAggregate.getUncommittedEvents())
-                            .flatMap(eventRepository::save)
-                            .then(Mono.fromCallable(() -> {
-                                userSystemAggregate.markEventsAsCommitted();
-                                return new CreateUserAdminResponse(
-                                        userSystemAggregate.getUserSystem().getId().getValue(),
-                                        userSystemAggregate.getUserSystem().getFirstname().getValue(),
-                                        userSystemAggregate.getUserSystem().getLastname().getValue(),
-                                        userSystemAggregate.getUserSystem().getEmail().getValue(),
-                                        userSystemAggregate.getUserSystem().getPassword().getValue(),
-                                        userSystemAggregate.getUserSystem().getRole().name()
-                                );
-                            }));
-                });
-
+                    return iUserRepositoryGateway.save(userAdminDTO)
+                            .flatMap(result -> Flux.fromIterable(userSystemAggregate.getUncommittedEvents())
+                                    .flatMap(eventRepository::save)
+                                    .then(Mono.fromCallable(() -> {
+                                        userSystemAggregate.markEventsAsCommitted();
+                                        return new CreateUserAdminResponse(
+                                                userSystemAggregate.getUserSystem().getId().getValue(),
+                                                userSystemAggregate.getUserSystem().getFirstname().getValue(),
+                                                userSystemAggregate.getUserSystem().getLastname().getValue(),
+                                                userSystemAggregate.getUserSystem().getEmail().getValue(),
+                                                userSystemAggregate.getUserSystem().getPassword().getValue(),
+                                                userSystemAggregate.getUserSystem().getRole().name()
+                                        );
+                                    })));
+                }))
+                .cast(CreateUserAdminResponse.class); // Asegurar el tipo final del flujo
     }
+
+
+
+//
+//    public Mono<CreateUserAdminResponse> save(CreateUserSystemCommand createUserSystemCommand){
+//        UserSystemAggregate userSystemAggregate = new UserSystemAggregate();
+//
+//        userSystemAggregate.createUserSystem(
+//                createUserSystemCommand.getFirstname(),
+//                createUserSystemCommand.getLastname(),
+//                createUserSystemCommand.getEmail(),
+//                createUserSystemCommand.getPassword(),
+//                createUserSystemCommand.getRole());
+//
+//        UserAdminDTO userAdminDTO = new UserAdminDTO(
+//                userSystemAggregate.getUserSystem().getId().getValue(),
+//                userSystemAggregate.getUserSystem().getFirstname().getValue(),
+//                userSystemAggregate.getUserSystem().getLastname().getValue(),
+//                userSystemAggregate.getUserSystem().getEmail().getValue(),
+//                userSystemAggregate.getUserSystem().getPassword().getValue(),
+//                userSystemAggregate.getUserSystem().getRole().name()
+//        );
+//
+//        return iUserRepositoryGateway.save(userAdminDTO)
+//                .flatMap(result -> {
+//
+//                    return Flux.fromIterable(userSystemAggregate.getUncommittedEvents())
+//                            .flatMap(eventRepository::save)
+//                            .then(Mono.fromCallable(() -> {
+//                                userSystemAggregate.markEventsAsCommitted();
+//                                return new CreateUserAdminResponse(
+//                                        userSystemAggregate.getUserSystem().getId().getValue(),
+//                                        userSystemAggregate.getUserSystem().getFirstname().getValue(),
+//                                        userSystemAggregate.getUserSystem().getLastname().getValue(),
+//                                        userSystemAggregate.getUserSystem().getEmail().getValue(),
+//                                        userSystemAggregate.getUserSystem().getPassword().getValue(),
+//                                        userSystemAggregate.getUserSystem().getRole().name()
+//                                );
+//                            }));
+//                });
+//
+//    }
 
 }

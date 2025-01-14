@@ -9,11 +9,14 @@ import ec.com.sofka.queries.account.GetAccountQuery;
 import ec.com.sofka.commands.account.UpdateAccountCommand;
 import ec.com.sofka.queries.usecase.account.GetAccountByNumberUseCase;
 import ec.com.sofka.queries.usecase.account.GetAllAccountsUseCase;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
+@Validated
 public class AccountHandler {
 
     private final CreateAccountUseCase createAccountUseCase;
@@ -58,7 +61,7 @@ public class AccountHandler {
         ));
     }
 
-    public Mono<AccountResponseDTO> createAccount(AccountRequestDTO request) {
+    public Mono<AccountResponseDTO> createAccount(@Valid AccountRequestDTO request) {
         return createAccountUseCase.execute(
                 new CreateAccountCommand(
                         request.getName(),
@@ -74,7 +77,7 @@ public class AccountHandler {
         ));
     }
 
-    public Mono<AccountResponseDTO> updateAccount(AccountRequestDTO request) {
+    public Mono<AccountResponseDTO> updateAccount(@Valid AccountRequestDTO request) {
         return updateAccountUseCase.execute(
                 new UpdateAccountCommand(
                         request.getCustomerId(),

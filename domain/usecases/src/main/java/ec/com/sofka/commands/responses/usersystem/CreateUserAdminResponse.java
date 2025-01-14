@@ -53,7 +53,7 @@ public class CreateUserAdminResponse {
     }
 
     public String getPassword() {
-        return password;
+        return "****************";
     }
 
     public void setPassword(String password) {

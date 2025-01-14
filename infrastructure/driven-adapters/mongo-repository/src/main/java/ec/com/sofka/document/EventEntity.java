@@ -72,7 +72,20 @@ public class EventEntity {
         }
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public void setAggregateId(String aggregateId) {
+        this.aggregateId = aggregateId;
+    }
 
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getId() {
+        return id;
+    }
 }
 

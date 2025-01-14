@@ -27,8 +27,11 @@ public class SecurityConfig {
                         exchanges
                                 .pathMatchers("/v1/api/ping/**",
                                         "v1/api/auth/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
                                         "/webjars/**").permitAll()
-                                .pathMatchers("/api/transactions").hasAuthority("ROLE_ADMIN")
+                                .pathMatchers("/v1/api/accounts/**").hasAuthority("ADMIN")
                                 .anyExchange()
                                 .authenticated())
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())

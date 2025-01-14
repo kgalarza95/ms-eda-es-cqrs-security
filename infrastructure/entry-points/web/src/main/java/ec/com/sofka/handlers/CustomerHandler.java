@@ -10,11 +10,14 @@ import ec.com.sofka.queries.customer.GetCustomerQuery;
 import ec.com.sofka.queries.usecase.customer.GetAllCustomerUseCase;
 import ec.com.sofka.commands.usecase.customer.UpdateCustomerUseCase;
 import ec.com.sofka.queries.usecase.customer.GetCustomerByIdUseCase;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
+@Validated
 public class CustomerHandler {
 
     private final GetAllCustomerUseCase getAllCustomerUseCase;
@@ -60,7 +63,7 @@ public class CustomerHandler {
                 ));
     }
 
-    public Mono<CustomerResponseDTO> createCustomer(CustomerRequestDTO request) {
+    public Mono<CustomerResponseDTO> createCustomer(@Valid CustomerRequestDTO request) {
         return createCustomerUseCase.execute(
                 new CreateCustomerCommand(
                         request.getIdentification(),
@@ -83,7 +86,7 @@ public class CustomerHandler {
         ));
     }
 
-    public Mono<CustomerResponseDTO> updateCustomer(CustomerRequestDTO request) {
+    public Mono<CustomerResponseDTO> updateCustomer(@Valid CustomerRequestDTO request) {
         return updateCustomerUseCase.execute(
                 new UpdateCustomerCommand(
                         request.getAggregateId(),
