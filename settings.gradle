@@ -15,8 +15,16 @@ findProject(':mongo-repository').projectDir = file('./infrastructure/driven-adap
 include ':web'
 findProject(':web').projectDir = file('./infrastructure/entry-points/web')
 
+include ':web-auth'
+findProject(':web-auth').projectDir = file('./infrastructure/entry-points/web-auth')
+
 include ':serializer'
 findProject(':serializer').projectDir = file('./infrastructure/helpers/serializer')
 
 include 'rabbit-info-bus'
 findProject(':rabbit-info-bus').projectDir = file('./infrastructure/driven-adapters/rabbit-info-bus')
+
+include ':web-security'
+findProject(':web-security').projectDir = file('./infrastructure/helpers/web-security')
+
+

@@ -4,7 +4,10 @@ dependencies {
     implementation project (':mongo-repository')
     implementation project (':rabbit-info-bus')
     implementation project (':web')
+    implementation project (':web-auth')
     implementation project (':serializer')
+    implementation project (':web-security')
+
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -12,8 +15,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 
-    //implementation 'org.springframework.boot:spring-boot-starter-security'
-    //testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
