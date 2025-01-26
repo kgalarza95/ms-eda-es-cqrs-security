@@ -5,26 +5,24 @@ import java.math.BigDecimal;
 public class AccountResponseDTO {
     public String customerId;
     public String accountId;
-    public String accountName;
-    public String accountNumber;
+    public String name;
+    public String accountNum;
     public BigDecimal balance;
     public String status;
 
-    //After delete
     public AccountResponseDTO(String customerId, String accountId, String accountName, String status) {
         this.customerId = customerId;
         this.accountId = accountId;
-        this.accountName = accountName;
+        this.name = accountName;
         this.status = status;
     }
 
 
-    //After update/create
     public AccountResponseDTO(String customerId, String accountId, String accountName, String accountNumber, BigDecimal balance, String status) {
         this.customerId = customerId;
         this.accountId = accountId;
-        this.accountName = accountName;
-        this.accountNumber = accountNumber;
+        this.name = accountName;
+        this.accountNum = accountNumber;
         this.balance = balance;
         this.status = status;
     }
@@ -37,7 +35,7 @@ public class AccountResponseDTO {
     }
 
     public String getAccountName() {
-        return accountName;
+        return name;
     }
 
     public BigDecimal getBalance() {

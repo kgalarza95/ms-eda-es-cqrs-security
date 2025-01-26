@@ -2,6 +2,7 @@ package ec.com.sofka.queries.usecase.customer;
 
 import ec.com.sofka.aggregate.CustomerAggregate;
 import ec.com.sofka.aggregate.events.CustomerCreated;
+import ec.com.sofka.aggregate.events.CustomerUpdated;
 import ec.com.sofka.gateway.IEventStoreGateway;
 import ec.com.sofka.generics.domain.DomainEvent;
 import ec.com.sofka.generics.interfaces.IUseCaseGet;
@@ -25,8 +26,9 @@ public class GetAllCustomerUseCase implements IUseCaseGet<GetCustomerResponse> {
         return iEventStoreGateway.findAllAggregates()
                 .collectList()
                 .flatMapMany(events -> {
+
                     Map<String, DomainEvent> latestEventsMap = events.stream()
-                            .filter(event -> event instanceof CustomerCreated)
+                            .filter(event -> event instanceof CustomerCreated ||event instanceof CustomerUpdated)
                             .collect(Collectors.toMap(
                                     DomainEvent::getAggregateRootId,
                                     event -> event,

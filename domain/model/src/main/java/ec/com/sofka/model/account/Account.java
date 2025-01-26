@@ -31,6 +31,7 @@ public class Account extends Entity<AccountId> {
     public NumberAcc getNumber() {
         return numberAcc;
     }
+
     public Name getName() {
         return name;
     }

@@ -12,15 +12,17 @@ public class TransactionCreated extends DomainEvent {
     private String id;
     private String description;
     private BigDecimal amount;
+    private BigDecimal tax;
     private String transactionType;
     private LocalDate date;
     private String accountId;
 
-    public TransactionCreated(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
+    public TransactionCreated(String id, String description, BigDecimal amount, String transactionType, LocalDate date, String accountId, BigDecimal tax) {
         super(TransactionEventsEnum.TRANSACTION_CREATED.name());
         this.id = id;
         this.description = description;
         this.amount = amount;
+        this.tax = tax;
         this.transactionType = transactionType;
         this.date = date;
         this.accountId = accountId;
@@ -52,5 +54,9 @@ public class TransactionCreated extends DomainEvent {
 
     public String getAccountId() {
         return accountId;
+    }
+
+    public BigDecimal getTax() {
+        return tax;
     }
 }

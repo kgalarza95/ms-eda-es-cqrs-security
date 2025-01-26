@@ -39,7 +39,6 @@ public class DeleteCustomerUseCase implements IUseCaseExecute<UpdateCustomerComm
                         return Mono.error(new ResourceNotFoundException("No events found for aggregate ID: " + request.getAggregateId()));
                     }
 
-                    //verificar si ultimo estado es inactivo para lanzar error.
                     CustomerAggregate customer = CustomerAggregate.from(request.getAggregateId(), events);
 
                     customer.updateCustomer(

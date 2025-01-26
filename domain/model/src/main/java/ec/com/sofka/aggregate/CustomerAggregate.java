@@ -91,10 +91,10 @@ public class CustomerAggregate extends AggregateRoot<CustomerId> {
         addEvent(new CustomerUpdated(new CustomerID().getValue(), identification, firstName, lastName, email, phone, address, birthDate, status)).apply();
     }
 
-    public void createTransaction(String description, BigDecimal amount, String transactionType, LocalDate date, String accountId) {
+    public void createTransaction(String description, BigDecimal amount, String transactionType, LocalDate date, String accountId,BigDecimal tax) {
         addEvent(new TransactionCreated(
                 new TransactionId().getValue(),
-                description,  amount, transactionType, date, accountId
+                description,  amount, transactionType, date, accountId,tax
         )).apply();
     }
 

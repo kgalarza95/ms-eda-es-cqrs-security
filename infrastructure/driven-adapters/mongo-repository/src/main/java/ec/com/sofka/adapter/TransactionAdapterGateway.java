@@ -3,9 +3,11 @@ package ec.com.sofka.adapter;
 import ec.com.sofka.gateway.ITransactionRepositoryGateway;
 import ec.com.sofka.gateway.dto.TransactionDTO;
 import ec.com.sofka.mapper.TransactionRepoMapper;
+import ec.com.sofka.queries.response.transaction.GetTransactionResponse;
 import ec.com.sofka.repository.mongo.ITransactionRepository;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -25,6 +27,12 @@ public class TransactionAdapterGateway implements ITransactionRepositoryGateway 
                 .map(TransactionRepoMapper::toEntity)
                 .flatMap(transactionRepository::save)
                 .map(TransactionRepoMapper::toDomain);
+    }
+
+    @Override
+    public Flux<GetTransactionResponse> getByAccount(String accountId) {
+        return transactionRepository.findByAccountId(accountId)
+                .map(TransactionRepoMapper::toDomainTax);
     }
 
 }

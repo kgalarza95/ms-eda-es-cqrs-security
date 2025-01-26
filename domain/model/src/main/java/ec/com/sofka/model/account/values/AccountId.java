@@ -4,6 +4,7 @@ import ec.com.sofka.generics.utils.Identity;
 
 //3. Implementing generics: For account case, create the Identity
 public class AccountId extends Identity {
+
     public AccountId() {
         super();
     }

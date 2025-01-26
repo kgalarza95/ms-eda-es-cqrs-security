@@ -69,7 +69,8 @@ public class SaveTransactionUseCase implements IUseCaseExecute<CreateTransaction
                             request.getAmount(),
                             request.getTransactionType(),
                             request.getDate(),
-                            request.getAccountId()
+                            request.getAccountId(),
+                            transactionCostBD
                     );
 
 

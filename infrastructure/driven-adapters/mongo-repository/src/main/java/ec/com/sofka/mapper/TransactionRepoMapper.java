@@ -2,8 +2,24 @@ package ec.com.sofka.mapper;
 
 import ec.com.sofka.document.TransactionEntity;
 import ec.com.sofka.gateway.dto.TransactionDTO;
+import ec.com.sofka.queries.response.transaction.GetTransactionResponse;
 
 public class TransactionRepoMapper {
+
+    public static GetTransactionResponse toDomainTax(TransactionEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        GetTransactionResponse transaction = new GetTransactionResponse();
+        transaction.setId(entity.getId());
+        transaction.setDescription(entity.getDescription());
+        transaction.setAmount(entity.getAmount().toString());
+        transaction.setTax(entity.getTax().toString());
+        transaction.setTransactionType(entity.getTransactionType());
+        transaction.setDate(entity.getDate());
+        return transaction;
+    }
 
     public static TransactionDTO toDomain(TransactionEntity entity) {
         if (entity == null) {

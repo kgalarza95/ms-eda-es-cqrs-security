@@ -1,5 +1,6 @@
 package ec.com.sofka.router;
 
+import ec.com.sofka.dto.AccountRequestDTO;
 import ec.com.sofka.dto.TransactionInDTO;
 import ec.com.sofka.handlers.TransactionHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Configuration
@@ -90,6 +92,7 @@ public class TransactionRouter {
     })
     public RouterFunction<ServerResponse> TransactionRouterBean() {
         return RouterFunctions.route()
+                .POST("/v1/api/movimientos/id", this::getTransactions)
                 .POST("/v1/api/movimientos/deposito/sucursal", this::makeBranchDeposit)
                 .POST("/v1/api/movimientos/deposito/cajero", this::makeATMDeposit)
                 .POST("/v1/api/movimientos/deposito/otra-cuenta", this::makeDepositToAnotherAccount)
@@ -97,6 +100,22 @@ public class TransactionRouter {
                 .POST("/v1/api/movimientos/compra/web", this::makeOnlinePurchase)
                 .POST("/v1/api/movimientos/retiro/cajero", this::makeATMWithdrawal)
                 .build();
+    }
+
+
+
+
+    private Mono<ServerResponse> getTransactions(ServerRequest request) {
+        return request.bodyToMono(TransactionInDTO.class)
+                .flatMap(transactionInDTO ->
+                        transactionHandler.getTransactions(transactionInDTO)
+                                .collectList()
+                )
+                .flatMap(response ->
+                        ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(response)
+                );
     }
 
     public Mono<ServerResponse> makeBranchDeposit(ServerRequest request) {
